@@ -1,3 +1,11 @@
 {
-    'Title': 'Teleboy'
+    'Title': 'Teleboy',
+    'Your Username': 'Your Username',
+    'Your Password': 'Your Password',
+    'Success': 'Success',
+    'User and password provided ok': 'User and password provided ok',
+    'Error': 'Error',
+    'You need to provide both a user and password': 'You need to provide both a user and password',
+    'Preferences': 'Preferences',
+    'Set your Login credentials': 'Set your Login credentials'
 }
