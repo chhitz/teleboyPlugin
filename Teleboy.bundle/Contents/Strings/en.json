@@ -7,5 +7,5 @@
     'Error': 'Error',
     'You need to provide both a user and password': 'You need to provide both a user and password',
     'Preferences': 'Preferences',
-    'Set your Login credentials': 'Set your Login credentials'
+    'Set your login credentials': 'Set your Login credentials'
 }
