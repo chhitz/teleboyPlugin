@@ -1,0 +1,12 @@
+Plex Plugin for teleboy.ch
+==========================
+
+This plugin allows you to watch live TV in Switerland.
+
+In order to use this plugin:
+* install this plugin to ~/Library/Appliation Support/Plex Media Server/Plug-ins
+* go to "http://www.teleboy.ch" in Safari
+* register and log in
+* start Plex and browse to the plugin
+* enter your login data in the preferences inside the plugin
+
