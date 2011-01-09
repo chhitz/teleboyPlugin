@@ -6,6 +6,7 @@ from PMS.Shortcuts import *
 ####################################################################################################
 
 VIDEO_PREFIX = "/video/teleboy"
+VIDEO_URL_BASE = "http://www.teleboy.ch"
 
 NAME = L('Title')
 
@@ -18,36 +19,19 @@ ICON          = 'icon-default.png'
 ####################################################################################################
 
 def Start():
-
-    ## make this plugin show up in the 'Video' section
-    ## in Plex. The L() function pulls the string out of the strings
-    ## file in the Contents/Strings/ folder in the bundle
-    ## see also:
-    ##  http://dev.plexapp.com/docs/mod_Plugin.html
-    ##  http://dev.plexapp.com/docs/Bundle.html#the-strings-directory
     Plugin.AddPrefixHandler(VIDEO_PREFIX, VideoMainMenu, L('VideoTitle'), ICON, ART)
 
     Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
     Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
 
-    ## set some defaults so that you don't have to
-    ## pass these parameters to these object types
-    ## every single time
-    ## see also:
-    ##  http://dev.plexapp.com/docs/Objects.html
     MediaContainer.art = R(ART)
     MediaContainer.title1 = NAME
     DirectoryItem.thumb = R(ICON)
 
-# see:
-#  http://dev.plexapp.com/docs/Functions.html#CreatePrefs
-#  http://dev.plexapp.com/docs/mod_Prefs.html#Prefs.Add
 def CreatePrefs():
-    Prefs.Add(id='username', type='text', default='', label='Your Username')
-    Prefs.Add(id='password', type='text', default='', label='Your Password', option='hidden')
+    Prefs.Add(id='username', type='text', default='', label=L('Your Username'))
+    Prefs.Add(id='password', type='text', default='', label=L('Your Password'), option='hidden')
 
-# see:
-#  http://dev.plexapp.com/docs/Functions.html#ValidatePrefs
 def ValidatePrefs():
     u = Prefs.Get('username')
     p = Prefs.Get('password')
@@ -55,82 +39,57 @@ def ValidatePrefs():
     ## message container
     if( u and p ):
         return MessageContainer(
-            "Success",
-            "User and password provided ok"
+            L('Success'),
+            L('User and password provided ok')
         )
     else:
         return MessageContainer(
-            "Error",
-            "You need to provide both a user and password"
+            L('Error'),
+            L('You need to provide both a user and password')
         )
-
-  
-
-
-#### the rest of these are user created functions and
-#### are not reserved by the plugin framework.
-#### see: http://dev.plexapp.com/docs/Functions.html for
-#### a list of reserved functions above
-
-
-
-#
-# Example main menu referenced in the Start() method
-# for the 'Video' prefix handler
-#
 
 def VideoMainMenu():
-
-    # Container acting sort of like a folder on
-    # a file system containing other things like
-    # "sub-folders", videos, music, etc
-    # see:
-    #  http://dev.plexapp.com/docs/Objects.html#MediaContainer
     dir = MediaContainer(viewGroup="InfoList")
+    
+    response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs.Get('username'), 'password': Prefs.Get('password'), 'x': 6, 'y': 5}, cacheTime=0)
+    #Log(response)
+    
+    response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': 'de'}, cacheTime=5*60)
+    #Log(XML.StringFromElement(response))
+    i=0
+    part = 0
+    summary = ""
+    name = ""
+    thumb = ""
+    for channel in response.xpath('//div[@class="epgdetail_content"]/table/tr'):
+        #Log(XML.StringFromElement(channel))
+        if part == 0:
+            part = 1
+            if i > 2:
+                break
+            summary = channel.findtext('.//span[@class="begintime"]') + " - " + channel.findtext('.//span[@class="endtime"]')
+        
+        elif part == 1:
+            part = 2
+            summary += " " + channel.findtext('td[@class="title"]') + ": "
+            thumbElement = channel.find('td[@class="logo"]')
+            name = thumbElement.find('img').get('title')
+            thumb = thumbElement.find('img').get('src')
 
+        
+        elif part == 2:
+            part = 0
+            summary += channel.findtext('.//p[@class="info_long"]') if channel.findtext('.//p[@class="info_long"]') else ""
+            stationId = int(thumb.split('/')[3])
+            dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
 
-    # see:
-    #  http://dev.plexapp.com/docs/Objects.html#DirectoryItem
-    #  http://dev.plexapp.com/docs/Objects.html#function-objects
-    dir.Append(
-        Function(
-            DirectoryItem(
-                CallbackExample,
-                "directory item title",
-                subtitle="subtitle",
-                summary="clicking on me will call CallbackExample",
-                thumb=R(ICON),
-                art=R(ART)
-            )
-        )
-    )
-
-  
-    # Part of the "preferences" example 
-    # see also:
-    #  http://dev.plexapp.com/docs/Objects.html#PrefsItem
-    #  http://dev.plexapp.com/docs/Functions.html#CreatePrefs
-    #  http://dev.plexapp.com/docs/Functions.html#ValidatePrefs 
     dir.Append(
         PrefsItem(
-            title="Your preferences",
-            subtile="So you can set preferences",
-            summary="lets you set preferences",
+            title=L('Preferences'),
+            summary=L('Set your login credentials'),
             thumb=R(ICON)
         )
     )
 
     # ... and then return the container
     return dir
-
-def CallbackExample(sender):
-
-    ## you might want to try making me return a MediaContainer
-    ## containing a list of DirectoryItems to see what happens =)
-
-    return MessageContainer(
-        "Not implemented",
-        "In real life, you'll make more than one callback,\nand you'll do something useful.\nsender.itemTitle=%s" % sender.itemTitle
-    )
-
-  
