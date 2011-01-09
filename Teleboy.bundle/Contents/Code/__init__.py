@@ -28,31 +28,8 @@ def Start():
     MediaContainer.title1 = NAME
     DirectoryItem.thumb = R(ICON)
 
-def CreatePrefs():
-    Prefs.Add(id='username', type='text', default='', label=L('Your Username'))
-    Prefs.Add(id='password', type='text', default='', label=L('Your Password'), option='hidden')
-
-def ValidatePrefs():
-    u = Prefs.Get('username')
-    p = Prefs.Get('password')
-    ## do some checks and return a
-    ## message container
-    if( u and p ):
-        return MessageContainer(
-            L('Success'),
-            L('User and password provided ok')
-        )
-    else:
-        return MessageContainer(
-            L('Error'),
-            L('You need to provide both a user and password')
-        )
-
 def VideoMainMenu():
     dir = MediaContainer(viewGroup="InfoList")
-    
-    response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs.Get('username'), 'password': Prefs.Get('password'), 'x': 6, 'y': 5}, cacheTime=0)
-    #Log(response)
     
     response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': 'de'}, cacheTime=5*60)
     #Log(XML.StringFromElement(response))
@@ -82,14 +59,6 @@ def VideoMainMenu():
             summary += channel.findtext('.//p[@class="info_long"]') if channel.findtext('.//p[@class="info_long"]') else ""
             stationId = int(thumb.split('/')[3])
             dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
-
-    dir.Append(
-        PrefsItem(
-            title=L('Preferences'),
-            summary=L('Set your login credentials'),
-            thumb=R(ICON)
-        )
-    )
 
     # ... and then return the container
     return dir
