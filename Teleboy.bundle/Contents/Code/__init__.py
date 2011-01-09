@@ -51,10 +51,10 @@ def ValidatePrefs():
 def VideoMainMenu():
     dir = MediaContainer(viewGroup="InfoList")
     
-    response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs.Get('username'), 'password': Prefs.Get('password'), 'x': 6, 'y': 5}, cacheTime=0)
+    response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs.Get('username'), 'password': Prefs.Get('password'), 'x': 6, 'y': 5})
     #Log(response)
     
-    response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': 'de'}, cacheTime=5*60)
+    response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': 'de'})
     #Log(XML.StringFromElement(response))
     i=0
     part = 0
