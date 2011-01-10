@@ -1,0 +1,22 @@
+[
+    {
+        "id":           "username",
+        "label":        "Your Username",
+        "type":         "text",
+        "default":      ""
+    },
+    {
+        "id":           "password",
+        "label":        "Your Password",
+        "type":         "text",
+        "option":       "hidden",
+        "default":      ""
+    },
+    {
+        "id":           "channels",
+        "label":        "Channel Selection",
+        "type":         "enum",
+        "values":       ["All channels", "German channels", "French channels", "Italien channels", "English channels"],
+        "default":      "German channels"
+    }
+]

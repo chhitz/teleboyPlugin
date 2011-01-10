@@ -1,8 +1,3 @@
-# PMS plugin framework
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
 ####################################################################################################
 
 VIDEO_PREFIX = "/video/teleboy"
@@ -28,14 +23,9 @@ def Start():
     MediaContainer.title1 = NAME
     DirectoryItem.thumb = R(ICON)
 
-def CreatePrefs():
-    Prefs.Add(id='username', type='text', default='', label=L('Your Username'))
-    Prefs.Add(id='password', type='text', default='', label=L('Your Password'), option='hidden')
-    Prefs.Add(id='channels', type='enum', values = [L('All channels'), L('German channels'), L('French channels'), L('Italien channels'), L('English channels')], default=L('German channels'), label=L('Channel Selection'))
-
 def ValidatePrefs():
-    u = Prefs.Get('username')
-    p = Prefs.Get('password')
+    u = Prefs['username']
+    p = Prefs['password']
     ## do some checks and return a
     ## message container
     if( u and p ):
@@ -66,12 +56,12 @@ def mapLanguagePrefs(languageSelection):
 def VideoMainMenu():
     dir = MediaContainer(viewGroup="InfoList")
     
-    response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs.Get('username'), 'password': Prefs.Get('password'), 'x': 6, 'y': 5})
+    response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs['username'], 'password': Prefs['password']})
     #Log(response)
-    #Log(Prefs.Get('channels'))
-    #Log(mapLanguagePrefs(Prefs.Get('channels')))
+    #Log(Prefs['channels'])
+    #Log(mapLanguagePrefs(Prefs['channels']))
     
-    response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': mapLanguagePrefs(Prefs.Get('channels'))})
+    response = HTML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", values={'cmd': 'getStations', 'category': mapLanguagePrefs(Prefs['channels'])})
     #Log(XML.StringFromElement(response))
     i=0
     part = 0
