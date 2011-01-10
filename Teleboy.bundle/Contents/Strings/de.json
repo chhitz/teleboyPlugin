@@ -7,5 +7,11 @@
     'Error': 'Fehler',
     'You need to provide both a user and password': 'Du musst einen Benutzernamen und Passwort angeben.',
     'Preferences': 'Einstellungen',
-    'Set your login credentials': 'Richte deinen Benutzername und Paswort ein.'
+    'Set your login credentials': 'Richte deinen Benutzername und Paswort ein.',
+    'All channels': 'Alle Kanäle',
+    'German channels': 'Deutsche Kanäle',
+    'French channels': 'Französische Kanäle',
+    'Italien channels': 'Italienische Kanäle',
+    'English channels': 'Englische Kanäle',
+    'Channel Selection': 'Kanal Selektion'
 }

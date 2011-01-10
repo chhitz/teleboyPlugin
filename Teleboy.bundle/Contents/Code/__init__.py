@@ -31,6 +31,7 @@ def Start():
 def CreatePrefs():
     Prefs.Add(id='username', type='text', default='', label=L('Your Username'))
     Prefs.Add(id='password', type='text', default='', label=L('Your Password'), option='hidden')
+    Prefs.Add(id='channels', type='enum', values = [L('All channels'), L('German channels'), L('French channels'), L('Italien channels'), L('English channels')], default=L('German channels'), label=L('Channel Selection'))
 
 def ValidatePrefs():
     u = Prefs.Get('username')
@@ -48,13 +49,29 @@ def ValidatePrefs():
             L('You need to provide both a user and password')
         )
 
+def mapLanguagePrefs(languageSelection):
+    if languageSelection == L('All channels'):
+        return 'all'
+    elif languageSelection == L('German channels'):
+        return 'de'
+    elif languageSelection == L('French channels'):
+        return 'fr'
+    elif languageSelection == L('Italien channels'):
+        return 'it'
+    elif languageSelection == L('English channels'):
+        return 'en'
+    else:
+        return ''
+
 def VideoMainMenu():
     dir = MediaContainer(viewGroup="InfoList")
     
     response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs.Get('username'), 'password': Prefs.Get('password'), 'x': 6, 'y': 5})
     #Log(response)
+    #Log(Prefs.Get('channels'))
+    #Log(mapLanguagePrefs(Prefs.Get('channels')))
     
-    response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': 'de'})
+    response = XML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", isHTML=True, values={'cmd': 'getStations', 'category': mapLanguagePrefs(Prefs.Get('channels'))})
     #Log(XML.StringFromElement(response))
     i=0
     part = 0
