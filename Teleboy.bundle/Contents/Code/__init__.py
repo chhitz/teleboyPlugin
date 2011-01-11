@@ -72,7 +72,12 @@ def VideoMainMenu():
             part = 0
             summary += channel.findtext('.//p[@class="info_long"]') if channel.findtext('.//p[@class="info_long"]') else ""
             stationId = int(thumb.split('/')[3])
-            dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=R("Logos/%d.png" % stationId), art=R("Logos/%d.png" % stationId), summary=summary))
+            staticThumb = R("Logos/%d.png" % stationId)
+            if staticThumb:
+                thumb = staticThumb
+            else:
+                thumb = VIDEO_URL_BASE + thumb
+            dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
 
     dir.Append(
         PrefsItem(
