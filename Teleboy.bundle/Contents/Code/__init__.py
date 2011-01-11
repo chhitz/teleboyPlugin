@@ -23,22 +23,6 @@ def Start():
     MediaContainer.title1 = NAME
     DirectoryItem.thumb = R(ICON)
 
-def ValidatePrefs():
-    u = Prefs['username']
-    p = Prefs['password']
-    ## do some checks and return a
-    ## message container
-    if( u and p ):
-        return MessageContainer(
-            L('Success'),
-            L('User and password provided ok')
-        )
-    else:
-        return MessageContainer(
-            L('Error'),
-            L('You need to provide both a user and password')
-        )
-
 def mapLanguagePrefs(languageSelection):
     if languageSelection == L('All channels'):
         return 'all'
