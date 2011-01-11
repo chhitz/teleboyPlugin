@@ -62,7 +62,7 @@ def VideoMainMenu():
         
         elif part == 1:
             part = 2
-            summary += " " + channel.findtext('td[@class="title"]') + ": "
+            summary += " - " + channel.findtext('td[@class="title"]') + ":\n"
             thumbElement = channel.find('td[@class="logo"]')
             name = thumbElement.find('img').get('title')
             thumb = thumbElement.find('img').get('src')
