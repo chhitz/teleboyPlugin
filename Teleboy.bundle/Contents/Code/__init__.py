@@ -24,15 +24,15 @@ def Start():
     DirectoryItem.thumb = R(ICON)
 
 def mapLanguagePrefs(languageSelection):
-    if languageSelection == L('All channels'):
+    if languageSelection == 'All channels':
         return 'all'
-    elif languageSelection == L('German channels'):
+    elif languageSelection == 'German channels':
         return 'de'
-    elif languageSelection == L('French channels'):
+    elif languageSelection == 'French channels':
         return 'fr'
-    elif languageSelection == L('Italien channels'):
+    elif languageSelection == 'Italien channels':
         return 'it'
-    elif languageSelection == L('English channels'):
+    elif languageSelection == 'English channels':
         return 'en'
     else:
         return ''
