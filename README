@@ -10,3 +10,16 @@ In order to use this plugin:
 * start Plex and browse to the plugin
 * enter your login data in the preferences inside the plugin
 
+
+HOW TO FIX THE LOGOS (Pixelmator)
+---------------------------------
+
+For black logos:
+* duplicate layer
+* set brightness of the background to max. (white)
+* apply filter: gaussian blur 16px
+
+For white logos:
+* duplicate layer
+* set brightness of the background to min. (black)
+* apply filter: gaussian blur 16px
