@@ -39,9 +39,7 @@ def VideoMainMenu():
     dir = MediaContainer(viewGroup="InfoList")
     
     response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs['username'], 'password': Prefs['password']})
-    #Log(response)
-    #Log(Prefs['channels'])
-    #Log(mapLanguagePrefs(Prefs['channels']))
+    Log(languagePrefs())
     
     for lang in languagePrefs():
         response = HTML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", values={'cmd': 'getStations', 'category': lang})
@@ -75,6 +73,7 @@ def VideoMainMenu():
                     thumb = staticThumb
                 else:
                     thumb = VIDEO_URL_BASE + thumb
+                    Log("No logo found for station %s (ID: %d)" % (name, stationId))
                 dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
 
     dir.Append(
