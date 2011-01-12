@@ -83,7 +83,7 @@ def VideoMainMenu():
         PrefsItem(
             title=L('Preferences'),
             summary=L('Set your login credentials'),
-            thumb=R(ICON)
+            thumb=R("icon-prefs.png")
         )
     )
 
