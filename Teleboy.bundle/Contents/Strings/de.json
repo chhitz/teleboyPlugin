@@ -8,10 +8,9 @@
     "You need to provide both a user and password": "Du musst einen Benutzernamen und Passwort angeben.",
     "Preferences": "Einstellungen",
     "Set your login credentials": "Richte deinen Benutzername und Passwort ein.",
-    "All channels": "Alle Kanäle",
-    "German channels": "Deutsche Kanäle",
-    "French channels": "Französische Kanäle",
-    "Italien channels": "Italienische Kanäle",
-    "English channels": "Englische Kanäle",
-    "Channel Selection": "Kanal Selektion"
+    "My channels": "Meine Sender",
+    "German channels": "Deutsche Sender",
+    "French channels": "Französische Sender",
+    "Italien channels": "Italienische Sender",
+    "English channels": "Englische Sender"
 }

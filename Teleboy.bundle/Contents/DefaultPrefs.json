@@ -13,10 +13,16 @@
         "default":      ""
     },
     {
+        "id":           "my_channels",
+        "label":        "My channels",
+        "type":         "bool",
+        "default":      "true"
+    },
+    {
         "id":           "channels_de",
         "label":        "German channels",
         "type":         "bool",
-        "default":      "true"
+        "default":      "false"
     },
     {
         "id":           "channels_fr",

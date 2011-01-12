@@ -78,6 +78,23 @@ def VideoMainMenu():
     response = HTTP.Request(VIDEO_URL_BASE + "/layer/login.php", values={'login': Prefs['username'], 'password': Prefs['password']})
     Log(languagePrefs())
     
+    myChannels = list()
+    if Prefs['my_channels']:
+        response = HTML.ElementFromURL(VIDEO_URL_BASE + "/programm/station/edit.php")
+        for channel in response.xpath('//table[@id="mystations_table"]/tbody/tr'):
+            Log(HTML.StringFromElement(channel))
+            position = int(channel.findtext('td[@class="station_pos"]'))
+            stationId = int(channel.find('td/input').get('value'))
+            myChannels.append(stationId)
+        Log(myChannels)
+        
+        allChannels = getChannelDetails('all')
+        for stationId in myChannels:
+            try:
+                dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=allChannels[stationId][0], thumb=allChannels[stationId][1], summary=allChannels[stationId][2]))
+            except:
+                pass
+    
     for lang in languagePrefs():
         for (stationId, (name, thumb, summary)) in getChannelDetails(lang).items():
             dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
