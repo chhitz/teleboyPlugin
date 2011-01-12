@@ -35,6 +35,43 @@ def languagePrefs():
         lang.append('en')
     return lang
 
+def getChannelDetails(lang):
+    channels = dict()
+    response = HTML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", values={'cmd': 'getStations', 'category': lang})
+    #Log(XML.StringFromElement(response))
+    i=0
+    part = 0
+    summary = ""
+    name = ""
+    thumb = ""
+    for channel in response.xpath('//div[@class="epgdetail_content"]/table/tr'):
+        #Log(XML.StringFromElement(channel))
+        if part == 0:
+            part = 1
+            if i > 2:
+                break
+            summary = channel.findtext('.//span[@class="begintime"]') + " - " + channel.findtext('.//span[@class="endtime"]')
+        
+        elif part == 1:
+            part = 2
+            summary += " - " + channel.findtext('td[@class="title"]') + "\n"
+            thumbElement = channel.find('td[@class="logo"]')
+            name = thumbElement.find('img').get('title')
+            thumb = thumbElement.find('img').get('src')
+        
+        elif part == 2:
+            part = 0
+            summary += channel.findtext('.//p[@class="info_long"]') if channel.findtext('.//p[@class="info_long"]') else ""
+            stationId = int(thumb.split('/')[3])
+            staticThumb = R("Logos/%d.png" % stationId)
+            if staticThumb:
+                thumb = staticThumb
+            else:
+                thumb = VIDEO_URL_BASE + thumb
+                Log("No logo found for station %s (ID: %d)" % (name, stationId))
+            channels[stationId] = (name, thumb, summary)
+    return channels
+
 def VideoMainMenu():
     dir = MediaContainer(viewGroup="InfoList")
     
@@ -42,39 +79,8 @@ def VideoMainMenu():
     Log(languagePrefs())
     
     for lang in languagePrefs():
-        response = HTML.ElementFromURL(VIDEO_URL_BASE + "/tv/player/includes/ajax.php", values={'cmd': 'getStations', 'category': lang})
-        #Log(XML.StringFromElement(response))
-        i=0
-        part = 0
-        summary = ""
-        name = ""
-        thumb = ""
-        for channel in response.xpath('//div[@class="epgdetail_content"]/table/tr'):
-            #Log(XML.StringFromElement(channel))
-            if part == 0:
-                part = 1
-                if i > 2:
-                    break
-                summary = channel.findtext('.//span[@class="begintime"]') + " - " + channel.findtext('.//span[@class="endtime"]')
-            
-            elif part == 1:
-                part = 2
-                summary += " - " + channel.findtext('td[@class="title"]') + "\n"
-                thumbElement = channel.find('td[@class="logo"]')
-                name = thumbElement.find('img').get('title')
-                thumb = thumbElement.find('img').get('src')
-            
-            elif part == 2:
-                part = 0
-                summary += channel.findtext('.//p[@class="info_long"]') if channel.findtext('.//p[@class="info_long"]') else ""
-                stationId = int(thumb.split('/')[3])
-                staticThumb = R("Logos/%d.png" % stationId)
-                if staticThumb:
-                    thumb = staticThumb
-                else:
-                    thumb = VIDEO_URL_BASE + thumb
-                    Log("No logo found for station %s (ID: %d)" % (name, stationId))
-                dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
+        for (stationId, (name, thumb, summary)) in getChannelDetails(lang).items():
+            dir.Append(WebVideoItem(VIDEO_URL_BASE + "/tv/player/player.php?station_id=%d" % stationId, title=name, thumb=thumb, summary=summary))
 
     dir.Append(
         PrefsItem(
