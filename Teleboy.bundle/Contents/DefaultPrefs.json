@@ -32,7 +32,7 @@
     },
     {
         "id":           "channels_it",
-        "label":        "Italien channels",
+        "label":        "Italian channels",
         "type":         "bool",
         "default":      "false"
     },

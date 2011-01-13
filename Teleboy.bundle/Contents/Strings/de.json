@@ -2,15 +2,11 @@
     "Title": "Teleboy TV",
     "Your Username": "Dein Teleboy Benutzername",
     "Your Password": "Dein Teleboy Passwort",
-    "Success": "Erfolg",
-    "User and password provided ok": "Benutzername und Passwort OK.",
-    "Error": "Fehler",
-    "You need to provide both a user and password": "Du musst einen Benutzernamen und Passwort angeben.",
     "Preferences": "Einstellungen",
     "Set your login credentials": "Richte deinen Benutzername und Passwort ein.",
     "My channels": "Meine Sender",
     "German channels": "Deutsche Sender",
     "French channels": "Französische Sender",
-    "Italien channels": "Italienische Sender",
+    "Italian channels": "Italienische Sender",
     "English channels": "Englische Sender"
 }
